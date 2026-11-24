@@ -1,0 +1,21 @@
+name: Backend smoke tests
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose up --build -d
+      - run: |
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:8080/health; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - run: python3 tests/smoke.py
+      - if: always()
+        run: docker compose logs
+      - if: always()
+        run: docker compose down
