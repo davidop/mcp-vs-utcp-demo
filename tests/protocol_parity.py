@@ -25,7 +25,7 @@ async def main():
                 key=str(uuid.uuid4())
                 order=await invoke_mcp("create_order",{**sku,"quantity":2,"idempotency_key":key})
                 assert order["sku"]==sku["sku"] and order["quantity"]==2 and order["id"]
-                assert await invoke_utcp("create_order",{**sku,"quantity":2,"Idempotency-Key":key})==order
+                assert await invoke_utcp("create_order",{"body":{**sku,"quantity":2},"Idempotency-Key":key})==order
                 assert await invoke_mcp("create_order",{**sku,"quantity":2,"idempotency_key":key})==order
                 print("Protocol parity passed")
             finally:
