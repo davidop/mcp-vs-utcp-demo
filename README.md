@@ -1,4 +1,16 @@
-# MCP vs UTCP Demo
+# MCP vs UTCP — Engineering Lab
+
+![Architecture comparison](docs/assets/architecture.svg)
+
+[![Backend CI](https://github.com/davidop/mcp-vs-utcp-demo/actions/workflows/backend.yml/badge.svg)](https://github.com/davidop/mcp-vs-utcp-demo/actions/workflows/backend.yml)
+[![Protocol CI](https://github.com/davidop/mcp-vs-utcp-demo/actions/workflows/protocols.yml/badge.svg)](https://github.com/davidop/mcp-vs-utcp-demo/actions/workflows/protocols.yml)
+
+Independent, evidence-driven comparison / Comparativa independiente basada en evidencias.
+
+- [Architecture and sequence diagrams](docs/architecture/overview.md)
+- [Decision and security guide](docs/architecture/decision-guide.md)
+- [Specification](specs/001-comparison.md)
+- [Branding policy](docs/assets/BRANDING.md)
 
 Hands-on comparison of two tool calling architectures, using the same .NET 10 inventory API. / Comparativa práctica de dos arquitecturas de invocación de herramientas sobre una API común.
 
