@@ -1,5 +1,5 @@
-name: Warm invocation benchmark
-on: [workflow_dispatch, push]
+name: Warm and cold invocation benchmark
+on: [workflow_dispatch, push, pull_request]
 permissions:
   contents: read
 jobs:
