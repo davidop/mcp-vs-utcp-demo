@@ -19,3 +19,19 @@ except urllib.error.HTTPError as e:
 else:
     raise AssertionError("Expected conflict")
 print("Backend smoke tests passed")
+
+def expect_error(code, path, data=None, key=None):
+    try:
+        call(path, data, key)
+    except urllib.error.HTTPError as e:
+        assert e.code == code, (e.code, code)
+    else:
+        raise AssertionError(f"Expected HTTP {code}")
+
+expect_error(404, "/stock/UNKNOWN")
+expect_error(404, "/products/UNKNOWN")
+expect_error(400, "/orders", payload)
+expect_error(400, "/orders", {"sku":"DEMO-001","quantity":0}, str(uuid.uuid4()))
+expect_error(400, "/orders", {"sku":"DEMO-001","quantity":43}, str(uuid.uuid4()))
+expect_error(400, "/orders", {"sku":"UNKNOWN","quantity":1}, str(uuid.uuid4()))
+print("Negative backend tests passed")
