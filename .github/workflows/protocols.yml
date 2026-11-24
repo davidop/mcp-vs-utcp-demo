@@ -1,0 +1,37 @@
+name: Protocol integration
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-mcp.txt -r requirements-utcp.txt
+      - run: docker compose up --build -d
+      - run: |
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:8080/health; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - run: |
+          mkdir -p results
+          python src/mcp-client/client.py | tee results/mcp.json
+          python -m http.server 8090 --bind 127.0.0.1 --directory manuals > /tmp/manual.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8090/inventory.json >/dev/null; then break; fi
+            sleep 1
+          done
+          python src/utcp-client/client.py | tee results/utcp.json
+        shell: bash
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: protocol-results
+          path: results/
+      - if: always()
+        run: docker compose down
