@@ -32,7 +32,7 @@ async def main():
     client=await UtcpClient.create(config={"manual_call_templates":[{"name":"inventory","call_template_type":"http","url":"http://127.0.0.1:8090/inventory.json","http_method":"GET"}]})
     try:
         async def utcp_call():
-            result=await client.call_tool("inventory.get_stock",{})
+            result=await client.call_tool("inventory.get_stock", {"sku":"DEMO-001"})
             return json.loads(result) if isinstance(result,str) else result
         await measure("UTCP",utcp_call)
     finally:
