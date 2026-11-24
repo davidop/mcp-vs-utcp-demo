@@ -36,6 +36,17 @@ MCP uses SDK stdio client/server; UTCP discovers a static HTTP manual and invoke
 
 Single invocation measurements are smoke-test observations, not benchmarks. Future work: identical parameter schemas, warm/cold repeated runs, dashboard, Slidev and optional Agent Framework integration.
 
+## Engineering deliverables
+
+- [Azure APIM architecture decision](docs/architecture/azure-apim.md)
+- [Benchmark runner](benchmarks/run.py) and [methodology](benchmarks/README.md)
+- [Benchmark CI and artifacts](https://github.com/davidop/mcp-vs-utcp-demo/actions/workflows/benchmark.yml)
+- [Evidence dashboard](dashboard/index.html)
+- [Slidev deck](slides/slides.md)
+- [Release acceptance checklist](docs/release-checklist.md)
+
+The benchmark and Pages workflows are configured, not yet verified. The dashboard imports measured JSON; it does not generate synthetic performance data.
+
 ## Official references
 - https://modelcontextprotocol.io/
 - https://github.com/universal-tool-calling-protocol/python-utcp
