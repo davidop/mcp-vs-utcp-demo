@@ -1,0 +1,2 @@
+# Benchmark methodology
+Record each invocation as JSONL with protocol, elapsed_ms and ok. Separate discovery and invocation; do not mix cold process launches with warm sessions. Use at least 100 warm calls per protocol, identical SKU and payload, and report SDK versions, transport, runner, commit, concurrency and failures. The aggregate.py script computes median and nearest-rank p95 from successful samples. It does not generate samples. No verified benchmark results yet.
