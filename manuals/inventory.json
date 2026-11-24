@@ -7,8 +7,14 @@
       "description": "Get synthetic stock",
       "inputs": {
         "type": "object",
-        "properties": {},
-        "required": []
+        "properties": {
+          "sku": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sku"
+        ]
       },
       "outputs": {
         "type": "object",
@@ -23,8 +29,97 @@
       },
       "tool_call_template": {
         "call_template_type": "http",
-        "url": "http://127.0.0.1:8080/stock/DEMO-001",
-        "http_method": "GET"
+        "url": "http://127.0.0.1:8080/stock/{sku}",
+        "http_method": "GET",
+        "name": "get_stock"
+      }
+    },
+    {
+      "name": "get_product",
+      "description": "Get synthetic product",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "sku": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sku"
+        ]
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "sku": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sku",
+          "name"
+        ]
+      },
+      "tool_call_template": {
+        "call_template_type": "http",
+        "url": "http://127.0.0.1:8080/products/{sku}",
+        "http_method": "GET",
+        "name": "get_product"
+      }
+    },
+    {
+      "name": "create_order",
+      "description": "Create synthetic order",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "sku": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "Idempotency-Key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sku",
+          "quantity",
+          "Idempotency-Key"
+        ]
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "sku",
+          "quantity"
+        ]
+      },
+      "tool_call_template": {
+        "call_template_type": "http",
+        "url": "http://127.0.0.1:8080/orders",
+        "http_method": "POST",
+        "content_type": "application/json",
+        "header_fields": [
+          "Idempotency-Key"
+        ],
+        "name": "create_order"
       }
     }
   ]
