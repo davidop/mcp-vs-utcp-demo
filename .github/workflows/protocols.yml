@@ -19,6 +19,7 @@ jobs:
           done
           exit 1
       - run: |
+          set -euo pipefail
           mkdir -p results
           python src/mcp-client/client.py | tee results/mcp.json
           python -m http.server 8090 --bind 127.0.0.1 --directory manuals > /tmp/manual.log 2>&1 &
@@ -27,6 +28,8 @@ jobs:
             sleep 1
           done
           python src/utcp-client/client.py | tee results/utcp.json
+          python tests/smoke.py | tee results/backend-tests.txt
+          python tests/protocol_parity.py | tee results/parity.txt
         shell: bash
       - uses: actions/upload-artifact@v4
         if: always()
