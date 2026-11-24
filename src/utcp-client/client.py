@@ -7,7 +7,7 @@ async def main():
     discovery = (time.perf_counter()-start)*1000
     try:
         start = time.perf_counter()
-        result = await client.call_tool("inventory.get_stock", {})
+        result = await client.call_tool("inventory.get_stock", {"sku":"DEMO-001"})
         elapsed = (time.perf_counter()-start)*1000
         if isinstance(result,str): result = json.loads(result)
         assert result == {"sku":"DEMO-001","stock":42}, result
