@@ -32,13 +32,14 @@ Then / Después:
 python src/utcp-client/client.py
 ```
 
-MCP uses SDK stdio client/server; UTCP discovers a static HTTP manual and invokes the REST endpoint directly. The initial UTCP tool exposes a fixed demo SKU, not general parameter parity yet. The manual server is for discovery only. No LLM or paid API required.
+MCP uses SDK stdio client/server; UTCP discovers a static HTTP manual and invokes the REST endpoint directly. The UTCP manual now declares parameterized product, stock and order operations; runtime parity remains unverified. / El manual UTCP declara operaciones parametrizadas de producto, stock y pedidos; la paridad en ejecución sigue sin verificar. The manual server is for discovery only. No LLM or paid API required.
 
-Single invocation measurements are smoke-test observations, not benchmarks. Future work: identical parameter schemas, warm/cold repeated runs, dashboard, Slidev and optional Agent Framework integration.
+Single invocation measurements are smoke-test observations, not benchmarks. The warm benchmark alternates protocol order and preserves failures. Cold runs and runtime parity remain pending verification.
 
 ## Engineering deliverables
 
 - [Azure APIM architecture decision](docs/architecture/azure-apim.md)
+- [Token context study](benchmarks/token-study.md) — offline schema estimates, not billed model usage.
 - [Benchmark runner](benchmarks/run.py) and [methodology](benchmarks/README.md)
 - [Benchmark CI and artifacts](https://github.com/davidop/mcp-vs-utcp-demo/actions/workflows/benchmark.yml)
 - [Evidence dashboard](dashboard/index.html)
