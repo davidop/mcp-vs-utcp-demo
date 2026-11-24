@@ -1,0 +1,31 @@
+{
+  "manual_version": "1.0.0",
+  "utcp_version": "1.0.1",
+  "tools": [
+    {
+      "name": "get_stock",
+      "description": "Get synthetic stock",
+      "inputs": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "sku": {
+            "type": "string"
+          },
+          "stock": {
+            "type": "integer"
+          }
+        }
+      },
+      "tool_call_template": {
+        "call_template_type": "http",
+        "url": "http://127.0.0.1:8080/stock/DEMO-001",
+        "http_method": "GET"
+      }
+    }
+  ]
+}
