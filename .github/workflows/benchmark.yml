@@ -28,8 +28,10 @@ jobs:
           git rev-parse HEAD > results/commit.txt
           uname -a > results/environment.txt
           pip freeze > results/dependencies.txt
-          python benchmarks/run.py > results/samples.jsonl
+          status=0
+          python benchmarks/run.py > results/samples.jsonl || status=$?
           python benchmarks/aggregate.py results/samples.jsonl > results/summary.json
+          exit "$status"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
