@@ -76,19 +76,27 @@
       "inputs": {
         "type": "object",
         "properties": {
-          "sku": {
-            "type": "string"
-          },
-          "quantity": {
-            "type": "integer"
+          "body": {
+            "type": "object",
+            "properties": {
+              "sku": {
+                "type": "string"
+              },
+              "quantity": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "sku",
+              "quantity"
+            ]
           },
           "Idempotency-Key": {
             "type": "string"
           }
         },
         "required": [
-          "sku",
-          "quantity",
+          "body",
           "Idempotency-Key"
         ]
       },
@@ -119,7 +127,8 @@
         "header_fields": [
           "Idempotency-Key"
         ],
-        "name": "create_order"
+        "name": "create_order",
+        "body_field": "body"
       }
     }
   ]
