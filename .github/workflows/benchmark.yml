@@ -31,6 +31,8 @@ jobs:
           status=0
           python benchmarks/run.py > results/samples.jsonl || status=$?
           python benchmarks/aggregate.py results/samples.jsonl > results/summary.json
+          python benchmarks/cold.py > results/cold-samples.jsonl || status=$?
+          python benchmarks/aggregate.py results/cold-samples.jsonl > results/cold-summary.json || status=$?
           exit "$status"
       - uses: actions/upload-artifact@v4
         if: always()
