@@ -34,6 +34,26 @@ jobs:
           python benchmarks/cold.py > results/cold-samples.jsonl || status=$?
           python benchmarks/aggregate.py results/cold-samples.jsonl > results/cold-summary.json || status=$?
           exit "$status"
+      - name: Publish measured summaries to job log
+        if: always()
+        run: |
+          for f in results/commit.txt results/summary.json results/cold-summary.json; do
+            if test -f "$f"; then
+              echo "=== $f ==="
+              cat "$f"
+            fi
+          done
+          {
+            echo '## Measured benchmark results'
+            for f in results/summary.json results/cold-summary.json; do
+              if test -f "$f"; then
+                echo "### $f"
+                echo '~~~json'
+                cat "$f"
+                echo '~~~'
+              fi
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
