@@ -1,0 +1,7 @@
+services:
+  api:
+    build: ./src/backend-api
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      ASPNETCORE_HTTP_PORTS: "8080"
