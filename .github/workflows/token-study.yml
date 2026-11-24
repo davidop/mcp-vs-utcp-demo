@@ -1,0 +1,28 @@
+name: Token schema baseline
+on: [push, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  estimate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r benchmarks/requirements-tokens.txt
+      - run: |
+          mkdir -p results
+          python benchmarks/token_context.py benchmarks/fixtures/normalized-catalog.json --selected get_stock > results/token-estimate.json
+          python - <<'PY'
+          import json
+          rows=json.load(open('results/token-estimate.json'))['results']
+          m={(r['protocol'],r['strategy']):r['estimated_schema_tokens'] for r in rows}
+          for s in ('full','selected'):
+              assert m['MCP',s]==m['UTCP',s]
+          assert m['MCP','selected']<m['MCP','full']
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: token-schema-estimate
+          path: results/token-estimate.json
