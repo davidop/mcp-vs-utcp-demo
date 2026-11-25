@@ -1,0 +1,35 @@
+name: Site and slides validation
+on: [pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build Slidev
+        working-directory: slides
+        run: |
+          npm install --no-audit --no-fund
+          npm run build -- --base /mcp-vs-utcp-demo/slides/
+          test -s dist/index.html
+      - name: Assemble static site
+        run: |
+          mkdir -p site/dashboard site/docs/assets site/slides
+          cp dashboard/index.html site/dashboard/
+          cp docs/assets/architecture.svg site/docs/assets/
+          cp -r slides/dist/. site/slides/
+          printf '<!doctype html><html lang="en"><meta charset="utf-8"><title>Engineering Lab</title><h1>MCP vs UTCP</h1><a href="dashboard/">Evidence dashboard</a> · <a href="slides/">Slides</a></html>' > site/index.html
+          test -s site/dashboard/index.html
+          test -s site/docs/assets/architecture.svg
+      - name: Check dashboard JavaScript syntax
+        run: |
+          python -c 'import re,pathlib; s=pathlib.Path("site/dashboard/index.html").read_text(); pathlib.Path("/tmp/dashboard.js").write_text(re.search(r"<script>(.*?)</script>",s,re.S).group(1))'
+          node --check /tmp/dashboard.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: validated-static-site
+          path: site/
