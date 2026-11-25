@@ -28,10 +28,36 @@ jobs:
           npm install --no-audit --no-fund
           npm run build -- --base /mcp-vs-utcp-demo/slides/
           test -s dist/index.html
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate measured evidence
+        run: |
+          pip install -r requirements-mcp.txt -r requirements-utcp.txt
+          docker compose up --build -d
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:8080/health; then break; fi
+            sleep 2
+          done
+          curl -fsS http://127.0.0.1:8080/health
+          python -m http.server 8090 --bind 127.0.0.1 --directory manuals >/tmp/manual.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8090/inventory.json; then break; fi
+            sleep 1
+          done
+          mkdir -p results
+          git rev-parse HEAD > results/commit.txt
+          uname -a > results/environment.txt
+          pip freeze > results/dependencies.txt
+          python benchmarks/run.py > results/samples.jsonl
+          python benchmarks/aggregate.py results/samples.jsonl > results/summary.json
+          python benchmarks/cold.py > results/cold-samples.jsonl
+          python benchmarks/aggregate.py results/cold-samples.jsonl > results/cold-summary.json
       - name: Assemble static site
         run: |
           mkdir -p site/dashboard site/docs/assets site/slides
           cp dashboard/index.html site/dashboard/
+          cp -r results site/dashboard/evidence
           cp docs/assets/architecture.svg site/docs/assets/
           cp -r slides/dist/. site/slides/
           printf '<!doctype html><html lang="en"><meta charset="utf-8"><title>Engineering Lab</title><h1>MCP vs UTCP</h1><a href="dashboard/">Evidence dashboard</a> · <a href="slides/">Slides</a></html>' > site/index.html
