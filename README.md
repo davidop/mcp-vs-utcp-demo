@@ -19,7 +19,8 @@ Hands-on comparison of two tool calling architectures, using the same .NET 10 in
 ## Run locally
 ```bash
 docker compose up --build -d
-python -m pip install -r requirements-mcp.txt -r requirements-utcp.txt
+python -m pip install -c constraints-ci.txt -r requirements-mcp.txt -r requirements-utcp.txt
+python -m pip check
 python tests/smoke.py
 python src/mcp-client/client.py
 ```
