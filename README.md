@@ -14,7 +14,7 @@ Independent, evidence-driven comparison / Comparativa independiente basada en ev
 
 Hands-on comparison of two tool calling architectures, using the same .NET 10 inventory API. / Comparativa práctica de dos arquitecturas de invocación de herramientas sobre una API común.
 
-**Status:** initial integration code committed; CI verification pending. No performance conclusions yet.
+**Status:** release candidate; backend, protocol integration and benchmark CI passed on [1d5e910](https://github.com/davidop/mcp-vs-utcp-demo/commit/1d5e9107c03e9e5bdb9c44b1d5b77977b829c08f). Release acceptance remains incomplete. / Candidato a release; CI superada, aceptación final pendiente.
 
 ## Run locally
 ```bash
@@ -32,9 +32,9 @@ Then / Después:
 python src/utcp-client/client.py
 ```
 
-MCP uses SDK stdio client/server; UTCP discovers a static HTTP manual and invokes the REST endpoint directly. The UTCP manual now declares parameterized product, stock and order operations; runtime parity remains unverified. / El manual UTCP declara operaciones parametrizadas de producto, stock y pedidos; la paridad en ejecución sigue sin verificar. The manual server is for discovery only. No LLM or paid API required.
+MCP uses SDK stdio client/server; UTCP discovers a static HTTP manual and invokes the REST endpoint directly. The UTCP manual now declares parameterized product, stock and order operations; runtime integration CI passed. / El manual UTCP declara operaciones parametrizadas de producto, stock y pedidos; CI de integración superada. The manual server is for discovery only. No LLM or paid API required.
 
-Single invocation measurements are smoke-test observations, not benchmarks. The warm benchmark alternates protocol order and preserves failures. Cold runs and runtime parity remain pending verification.
+Single invocation measurements are smoke-test observations, not benchmarks. The warm benchmark alternates protocol order and preserves failures. Cold and warm runs passed CI, including independent recalculation of 240 raw samples.
 
 ## Engineering deliverables
 
@@ -46,7 +46,7 @@ Single invocation measurements are smoke-test observations, not benchmarks. The 
 - [Slidev deck](slides/slides.md)
 - [Release acceptance checklist](docs/release-checklist.md)
 
-The benchmark and Pages workflows are configured, not yet verified. The dashboard imports measured JSON; it does not generate synthetic performance data.
+The [benchmark workflow passed with raw-sample audit](https://github.com/davidop/mcp-vs-utcp-demo/actions/runs/45523872898). Pages deployment remains unverified. The dashboard imports measured JSON; it does not generate synthetic performance data.
 
 ## Official references
 - https://modelcontextprotocol.io/
