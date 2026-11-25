@@ -33,7 +33,7 @@ jobs:
           python-version: '3.12'
       - name: Generate measured evidence
         run: |
-          pip install -r requirements-mcp.txt -r requirements-utcp.txt
+          pip install -c constraints-ci.txt -r requirements-mcp.txt -r requirements-utcp.txt && python -m pip check
           docker compose up --build -d
           for i in $(seq 1 60); do
             if curl -fsS http://127.0.0.1:8080/health; then break; fi
