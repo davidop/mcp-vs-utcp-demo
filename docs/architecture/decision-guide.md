@@ -14,3 +14,26 @@ Treat tool descriptions and results as untrusted. Allowlist destinations, restri
 
 ## Benchmark policy
 Use identical payloads, backend, concurrency and connection reuse; separate cold discovery from warm calls. Record raw samples, failures, environment, versions and commit SHA. Compare stdio and Streamable HTTP separately. No universal winner can be inferred from a single lab.
+
+## Guía de decisión en español
+
+| Dimensión | MCP | UTCP |
+|---|---|---|
+| Descubrimiento | Negociación de capacidades y tools/list | Manual y plantillas de llamada |
+| Invocación | Llamada a herramienta MCP | Protocolo nativo mediante plugin cliente |
+| Capacidades adicionales | Recursos, prompts y capacidades negociadas | Centrado en invocación de herramientas |
+| API REST existente | Adaptador servidor si no está expuesta | Descripción del endpoint nativo |
+| Seguridad | Autorización según transporte y políticas del servidor | Credenciales nativas y políticas del cliente |
+| Rendimiento | Medir transporte e implementación reales | Medir transporte e implementación reales |
+
+### Decisión arquitectónica
+
+Seleccionar MCP cuando la interoperabilidad con hosts compatibles y las capacidades negociadas sean requisitos principales. Evaluar UTCP cuando existan APIs nativas estables y se quiera evitar un intermediario de invocación. Una arquitectura híbrida es válida: mantener el contrato de negocio común y elegir el mecanismo de acceso por consumidor. No asumir que eliminar un salto implica reducir tokens: el contexto enviado al modelo depende de los esquemas y del host.
+
+### Límites de seguridad
+
+Tratar descripciones y respuestas como datos no confiables. Restringir destinos, redirecciones y salida de red; proteger credenciales, validar parámetros, exigir aprobación para escrituras sensibles y aplicar idempotencia. Stdio local no equivale a HTTP remoto con OAuth. Ninguno de los protocolos garantiza por sí solo un agente seguro.
+
+### Interpretación de las mediciones
+
+Mantener iguales payloads, backend, concurrencia y reutilización de conexiones. Separar descubrimiento en frío de llamadas en caliente. Conservar muestras, errores, entorno, versiones y SHA. Comparar stdio y Streamable HTTP por separado; este laboratorio no demuestra un ganador universal. Las estimaciones de contexto no son mediciones de facturación de un LLM.
