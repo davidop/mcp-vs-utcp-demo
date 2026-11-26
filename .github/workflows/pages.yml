@@ -53,6 +53,8 @@ jobs:
           python benchmarks/aggregate.py results/samples.jsonl > results/summary.json
           python benchmarks/cold.py > results/cold-samples.jsonl
           python benchmarks/aggregate.py results/cold-samples.jsonl > results/cold-summary.json
+      - name: Audit evidence before publication
+        run: python benchmarks/audit_samples.py
       - name: Assemble static site
         run: |
           mkdir -p site/dashboard site/docs/assets site/slides
