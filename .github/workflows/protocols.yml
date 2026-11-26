@@ -31,6 +31,17 @@ jobs:
           python tests/smoke.py | tee results/backend-tests.txt
           python tests/protocol_parity.py | tee results/parity.txt
         shell: bash
+      - name: Agent Framework integration (isolated environment)
+        run: |
+          set -euo pipefail
+          python -m venv /tmp/agent-framework-env
+          source /tmp/agent-framework-env/bin/activate
+          python -m pip install -c constraints-ci.txt -r requirements-mcp.txt -r requirements-utcp.txt agent-framework-core==1.26.0
+          python -m pip check
+          python -m pip freeze > results/agent-framework-dependencies.txt
+          curl -fsS http://127.0.0.1:8090/inventory.json >/dev/null
+          python examples/agent-framework/compare.py | tee results/agent-framework.json
+        shell: bash
       - uses: actions/upload-artifact@v4
         if: always()
         with:
