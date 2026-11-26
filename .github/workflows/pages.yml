@@ -18,7 +18,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -67,6 +66,13 @@ jobs:
         run: |
           python -c 'import re,pathlib; s=pathlib.Path("site/dashboard/index.html").read_text(); pathlib.Path("/tmp/dashboard.js").write_text(re.search(r"<script>(.*?)</script>",s,re.S).group(1))'
           node --check /tmp/dashboard.js
+      - name: Preserve independently built site
+        uses: actions/upload-artifact@v4
+        with:
+          name: engineering-lab-site
+          path: site
+          if-no-files-found: error
+      - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
