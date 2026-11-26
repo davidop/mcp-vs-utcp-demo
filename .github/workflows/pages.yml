@@ -1,4 +1,5 @@
 name: Publish engineering lab
+# Pages source configured; trigger deployment validation.
 on:
   workflow_dispatch:
   push:
